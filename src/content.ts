@@ -26,7 +26,7 @@ export const about = {
   lede: `I started out studying interactive design, wandered into code, and
     have spent the last fifteen years leading teams and building tools that
     help other people build things.`,
-  body: html`I'm an engineering manager at
+  body: html`I'm an Engineering Manager at
     <a href="https://www.hubspot.com" target="_blank" rel="noopener noreferrer"
       >HubSpot<span class="visually-hidden"> (opens in a new tab)</span></a
     >, where I grew from a designer &amp; software engineer as the company

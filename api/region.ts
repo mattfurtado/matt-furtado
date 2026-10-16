@@ -1,4 +1,4 @@
-import { OPT_IN_REGIONS } from '../shared/consent-regions.ts';
+import { OPT_IN_REGIONS } from '../shared/consent-regions.js';
 
 /** Tells the page whether this visitor's country needs opt-in cookie consent. */
 export function GET(request: Request) {

@@ -1,15 +1,26 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { sharedStyles } from './shared-styles.ts';
-import { consentPreview, consentUiEnabled, savedConsent, setConsent, type Consent } from './analytics.ts';
+import {
+  analyticsEnabled,
+  consentPreview,
+  consentRequired,
+  savedConsent,
+  setConsent,
+  type Consent,
+} from './analytics.ts';
 
 /** Fired on window to reopen the banner, e.g. from a "Cookie settings" link. */
 export const OPEN_CONSENT_EVENT = 'mf:open-consent';
 
-/** Asks visitors whether Google Analytics may set cookies. */
+/**
+ * Asks visitors whether Google Analytics may set cookies. Opens on its own
+ * only for visitors in opt-in regions who haven't chosen yet; anyone can
+ * open it from "Cookie settings" in the footer.
+ */
 @customElement('mf-consent-banner')
 export class MfConsentBanner extends LitElement {
-  @state() private open = consentPreview || (consentUiEnabled && savedConsent() === null);
+  @state() private open = consentPreview;
 
   private reopen = () => {
     this.open = true;
@@ -18,6 +29,11 @@ export class MfConsentBanner extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener(OPEN_CONSENT_EVENT, this.reopen);
+    if (!this.open && analyticsEnabled && savedConsent() === null) {
+      consentRequired().then((required) => {
+        if (required) this.open = true;
+      });
+    }
   }
 
   disconnectedCallback() {

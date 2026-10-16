@@ -35,6 +35,9 @@ index.html              Page shell, fonts, and social sharing tags
 vite.config.ts          Fills in the site URL for absolute links in index.html
 api/
   contact.ts            Contact form function: sends the email and logs a row in Google Sheets
+  region.ts             Tells the page whether the visitor's country needs cookie consent
+shared/
+  consent-regions.ts    Countries that need opt-in consent, used by the site and the API
 public/                 Favicon and share image, copied as-is
 src/
   main.ts               Entry point that loads the page, theme toggle, and consent banner
@@ -85,4 +88,4 @@ src/
 
 Form contents are never sent to Google Analytics.
 
-**Consent** uses Google Consent Mode v2. Ad features are denied everywhere. Analytics cookies default to denied in the EEA, the UK, and Switzerland and to granted elsewhere; Google applies the right default from the visitor's location. Every visitor sees a banner with equally weighted Accept and Decline buttons, and the choice is saved in `localStorage` and applied on later visits. "Cookie settings" in the footer reopens the banner. To try the banner locally, where analytics is off, add `?consent` to the URL (for example `http://localhost:5173/?consent`).
+**Consent** uses Google Consent Mode v2. Ad features are denied everywhere. Analytics cookies default to denied in the EEA, the UK, and Switzerland and to granted elsewhere; Google applies the right default from the visitor's location. The banner opens on its own only for visitors in those regions who haven't chosen yet: the page asks `/api/region`, which reads Vercel's `x-vercel-ip-country` header, once per browser session, and shows the banner if the check fails. The banner has equally weighted Accept and Decline buttons, and the choice is saved in `localStorage` and applied on later visits. "Cookie settings" in the footer opens the banner for any visitor. To try the banner locally, where analytics is off, add `?consent` to the URL (for example `http://localhost:5173/?consent`).

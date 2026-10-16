@@ -1,6 +1,8 @@
 // Google Analytics 4. Loads only in production builds with a measurement ID,
 // so local development never sends data.
 
+import { OPT_IN_REGIONS } from '../shared/consent-regions.ts';
+
 declare global {
   interface Window {
     dataLayer: unknown[];
@@ -26,13 +28,6 @@ export type Consent = 'granted' | 'denied';
 
 const CONSENT_KEY = 'mf-analytics-consent';
 
-// Regions where analytics cookies need opt-in consent: the EEA, the UK, and
-// Switzerland. Google applies these defaults based on the visitor's location.
-const OPT_IN_REGIONS = [
-  'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU',
-  'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES',
-  'SE', 'IS', 'LI', 'NO', 'GB', 'CH',
-];
 
 /** The visitor's saved choice, or null if they haven't chosen yet. */
 export function savedConsent(): Consent | null {
@@ -41,6 +36,34 @@ export function savedConsent(): Consent | null {
     return value === 'granted' || value === 'denied' ? value : null;
   } catch {
     return null;
+  }
+}
+
+const REGION_KEY = 'mf-consent-required';
+
+/**
+ * Whether this visitor's country needs opt-in consent, asked of /api/region
+ * once per browser session. Any failure counts as yes, to be safe.
+ */
+export async function consentRequired(): Promise<boolean> {
+  try {
+    const cached = sessionStorage.getItem(REGION_KEY);
+    if (cached !== null) return cached === 'true';
+  } catch {
+    // Storage blocked: ask the server.
+  }
+  try {
+    const res = await fetch('/api/region');
+    const { consentRequired } = await res.json();
+    const required = consentRequired !== false;
+    try {
+      sessionStorage.setItem(REGION_KEY, String(required));
+    } catch {
+      // Storage blocked: fine, we'll ask again next page load.
+    }
+    return required;
+  } catch {
+    return true;
   }
 }
 

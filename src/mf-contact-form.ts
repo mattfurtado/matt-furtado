@@ -10,6 +10,9 @@ export class MfContactForm extends LitElement {
   /** Shown as a fallback when sending fails. */
   @property() email = '';
 
+  /** Linked once the message is sent. */
+  @property() resume = '';
+
   @state() private status: Status = 'idle';
   @state() private error = '';
 
@@ -53,31 +56,43 @@ export class MfContactForm extends LitElement {
     if (this.status === 'sent') {
       return html`
         <div class="status" role="status">
-          <p>Thanks for reaching out. I’ll get back to you soon.</p>
+          <p class="thanks">Thanks for reaching out. I’ll get back to you soon.</p>
+          ${this.resume
+            ? html`<p>
+                In the meantime, here’s my
+                <a href=${this.resume} target="_blank" rel="noopener noreferrer"
+                  >resume<span class="visually-hidden"> (opens in a new tab)</span></a
+                >.
+              </p>`
+            : null}
         </div>
       `;
     }
 
     const sending = this.status === 'sending';
     return html`
-      <form @submit=${this.onSubmit} @input=${this.onInput}>
-        <div class="row">
-          <label>Name <input type="text" name="name" required maxlength="200" autocomplete="name" /></label>
-          <label>Email <input type="email" name="email" required maxlength="320" autocomplete="email" /></label>
-        </div>
-        <label>Message <textarea name="message" rows="5" required maxlength="5000"></textarea></label>
-        <div class="trap" aria-hidden="true">
-          <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
-        </div>
-        ${this.status === 'error'
-          ? html`<p class="error" role="alert">
-              ${this.error} You can also email me at
-              <a href="mailto:${this.email}">${this.email}</a>.
-            </p>`
-          : null}
-        <div>
-          <button type="submit" ?disabled=${sending}>${sending ? 'Sending…' : 'Send message'}</button>
-        </div>
+      <form @submit=${this.onSubmit} @input=${this.onInput} aria-busy=${sending}>
+        <fieldset ?disabled=${sending}>
+          <div class="row">
+            <label>Name <input type="text" name="name" required maxlength="200" autocomplete="name" /></label>
+            <label>Email <input type="email" name="email" required maxlength="320" autocomplete="email" /></label>
+          </div>
+          <label>Message <textarea name="message" rows="5" required maxlength="5000"></textarea></label>
+          <div class="trap" aria-hidden="true">
+            <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          ${this.status === 'error'
+            ? html`<p class="error" role="alert">
+                ${this.error} You can also email me at
+                <a href="mailto:${this.email}">${this.email}</a>.
+              </p>`
+            : null}
+          <div>
+            <button type="submit">
+              ${sending ? html`<span class="spinner" aria-hidden="true"></span>Sending…` : 'Send message'}
+            </button>
+          </div>
+        </fieldset>
       </form>
     `;
   }
@@ -85,7 +100,11 @@ export class MfContactForm extends LitElement {
   static styles = [
     sharedStyles,
     css`
-      form {
+      fieldset {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        min-width: 0;
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -144,9 +163,40 @@ export class MfContactForm extends LitElement {
         cursor: pointer;
       }
 
-      button:disabled {
+      button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      fieldset:disabled input,
+      fieldset:disabled textarea {
         opacity: 0.6;
+      }
+
+      fieldset:disabled button {
         cursor: progress;
+      }
+
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spin 800ms linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .spinner {
+          animation-duration: 2400ms;
+        }
       }
 
       /* Hidden from people; bots that fill every field get filtered out. */
@@ -160,12 +210,15 @@ export class MfContactForm extends LitElement {
       }
 
       .status {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
         padding: 24px;
         border-radius: 16px;
         background: var(--fill);
       }
 
-      .status p {
+      .thanks {
         font-family: var(--serif);
         font-size: 20px;
         line-height: 1.4;

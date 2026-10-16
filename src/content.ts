@@ -18,6 +18,7 @@ export const profile = {
   email: 'mptado@gmail.com',
   linkedin: 'https://www.linkedin.com/in/mattfurtado',
   github: 'https://github.com/mattfurtado',
+  resume: 'https://drive.google.com/file/d/1OmBrUgWJYUMB0TxxmBlq57r5sEfOTaqd/view?usp=sharing',
 };
 
 export const about = {

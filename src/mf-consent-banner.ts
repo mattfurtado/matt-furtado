@@ -68,16 +68,16 @@ export class MfConsentBanner extends LitElement {
       section {
         position: fixed;
         z-index: 10;
-        left: 16px;
-        right: 16px;
-        bottom: 16px;
+        left: var(--space-4);
+        right: var(--space-4);
+        bottom: var(--space-4);
         max-width: 648px;
         margin: 0 auto;
-        padding: 16px 20px;
+        padding: var(--space-4) var(--space-5);
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 12px 24px;
+        gap: var(--space-3) var(--space-6);
         background: var(--field);
         border: 1px solid var(--line);
         border-radius: 16px;
@@ -86,22 +86,22 @@ export class MfConsentBanner extends LitElement {
 
       p {
         flex: 1 1 280px;
-        font-size: 16px;
+        font-size: var(--text-md);
         line-height: 1.5;
       }
 
       .actions {
         display: flex;
-        gap: 8px;
+        gap: var(--space-2);
       }
 
       /* Both choices get equal weight, as consent rules expect. */
       button {
         font: inherit;
-        font-size: 16px;
+        font-size: var(--text-md);
         font-weight: 500;
         min-height: 44px;
-        padding: 0 20px;
+        padding: 0 var(--space-5);
         border: 1px solid var(--line);
         border-radius: 999px;
         background: var(--ground);

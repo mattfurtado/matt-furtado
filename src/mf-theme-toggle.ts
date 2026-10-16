@@ -78,8 +78,8 @@ export class MfThemeToggle extends LitElement {
     css`
       :host {
         position: absolute;
-        top: 16px;
-        right: 16px;
+        top: var(--space-4);
+        right: var(--space-4);
         z-index: 5;
       }
 

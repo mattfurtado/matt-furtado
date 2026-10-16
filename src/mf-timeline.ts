@@ -105,7 +105,7 @@ export class MfTimeline extends LitElement {
     css`
       .rail {
         display: grid;
-        gap: 4px;
+        gap: var(--space-1);
       }
 
       .segment {
@@ -119,7 +119,7 @@ export class MfTimeline extends LitElement {
         cursor: pointer;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: var(--space-2);
         border-radius: 8px;
       }
 
@@ -132,7 +132,7 @@ export class MfTimeline extends LitElement {
       }
 
       .year {
-        font-size: 12px;
+        font-size: var(--text-xs);
         font-variant-numeric: tabular-nums;
       }
 
@@ -154,28 +154,28 @@ export class MfTimeline extends LitElement {
       }
 
       .detail {
-        margin-top: 20px;
+        margin-top: var(--space-5);
         min-height: 176px;
       }
 
       .title {
         font-family: var(--serif);
-        font-size: 24px;
+        font-size: var(--text-xl);
         line-height: 1.3;
       }
 
       .team {
-        margin-top: 4px;
+        margin-top: var(--space-1);
       }
 
       .dates {
-        margin-top: 4px;
-        font-size: 14px;
+        margin-top: var(--space-1);
+        font-size: var(--text-sm);
         color: var(--ink-soft);
       }
 
       .summary {
-        margin-top: 12px;
+        margin-top: var(--space-3);
       }
 
       @media (prefers-reduced-motion: reduce) {

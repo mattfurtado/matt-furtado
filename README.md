@@ -58,7 +58,7 @@ src/
 
 **Content is separate from components.** Text, links, and roles live in `src/content.ts`. Most entries are plain strings; entries that need inline links are Lit `html` templates.
 
-**Styling uses CSS custom properties.** Colors and fonts are defined once on `:root` in `src/styles.css`. Those values inherit into each component's shadow DOM, so changing a token updates the whole site. Type is Lora for headings and IBM Plex Sans for body copy. Font sizes and spacing use multiples of 4px, with 14px timeline dates as the one exception.
+**Styling uses CSS custom properties.** Colors and fonts are defined once on `:root` in `src/styles.css`. Those values inherit into each component's shadow DOM, so changing a token updates the whole site. Type is Lora for headings and IBM Plex Sans for body copy. Spacing comes from `--space-*` variables named by their multiple of 4px (`--space-4` is 16px), and font sizes from a `--text-xs` to `--text-xl` scale plus fluid `--text-lede` and `--text-display` sizes. Component sizes such as 44px tap targets stay as plain values.
 
 **Dark mode** uses the same tokens with darker values, defined in `src/styles.css`. The site follows the visitor's system setting until they use the toggle in the top right, which saves their choice to `localStorage`. A small script in `index.html` applies a saved choice before the page draws, so it never flashes the wrong theme.
 

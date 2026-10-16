@@ -20,7 +20,7 @@ export const sharedStyles = css`
 
   h2 {
     margin: 0;
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;

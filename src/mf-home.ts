@@ -84,10 +84,10 @@ export class MfHome extends LitElement {
       main {
         max-width: 680px;
         margin: 0 auto;
-        padding: 96px 24px 72px;
+        padding: var(--space-24) var(--space-6) var(--space-18);
         display: flex;
         flex-direction: column;
-        gap: 72px;
+        gap: var(--space-18);
       }
 
       header,
@@ -97,17 +97,17 @@ export class MfHome extends LitElement {
       }
 
       header {
-        gap: 20px;
+        gap: var(--space-5);
       }
 
       section {
-        gap: 16px;
+        gap: var(--space-4);
       }
 
       .avatars {
         display: flex;
         /* Offset the separator border so the logo lines up with the text. */
-        margin-left: -4px;
+        margin-left: calc(-1 * var(--space-1));
       }
 
       .avatar {
@@ -120,7 +120,7 @@ export class MfHome extends LitElement {
       }
 
       .avatar + .avatar {
-        margin-left: -16px;
+        margin-left: calc(-1 * var(--space-4));
       }
 
       .badge {
@@ -139,39 +139,39 @@ export class MfHome extends LitElement {
         margin: 0;
         font-family: var(--serif);
         font-weight: 400;
-        font-size: clamp(40px, 9vw, 52px);
+        font-size: var(--text-display);
         line-height: 1.1;
         letter-spacing: -0.5px;
       }
 
       .tagline {
-        font-size: 20px;
+        font-size: var(--text-lg);
         color: var(--ink-soft);
       }
 
       nav {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 4px;
+        gap: var(--space-3);
+        margin-top: var(--space-1);
       }
 
       .pill {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--space-2);
         min-height: 44px;
-        padding: 0 20px;
+        padding: 0 var(--space-5);
         border: 1px solid var(--line);
         border-radius: 999px;
         text-decoration: none;
-        font-size: 16px;
+        font-size: var(--text-md);
         font-weight: 500;
       }
 
       .lede {
         font-family: var(--serif);
-        font-size: clamp(24px, 4.5vw, 28px);
+        font-size: var(--text-lede);
         line-height: 1.4;
       }
 
@@ -183,8 +183,8 @@ export class MfHome extends LitElement {
       footer {
         display: flex;
         flex-wrap: wrap;
-        gap: 4px 16px;
-        font-size: 12px;
+        gap: var(--space-1) var(--space-4);
+        font-size: var(--text-xs);
       }
 
       footer a {

@@ -117,29 +117,29 @@ export class MfContactForm extends LitElement {
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: var(--space-4);
       }
 
       .row {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 16px;
+        gap: var(--space-4);
       }
 
       label {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        font-size: 16px;
+        gap: var(--space-2);
+        font-size: var(--text-md);
         font-weight: 500;
       }
 
       input,
       textarea {
         font: inherit;
-        font-size: 16px;
+        font-size: var(--text-md);
         font-weight: 400;
-        padding: 12px 16px;
+        padding: var(--space-3) var(--space-4);
         border: 1px solid var(--line);
         border-radius: 12px;
         background: var(--field);
@@ -163,12 +163,12 @@ export class MfContactForm extends LitElement {
       button {
         font: inherit;
         min-height: 48px;
-        padding: 0 28px;
+        padding: 0 var(--space-7);
         border: 0;
         border-radius: 999px;
         background: var(--accent);
         color: var(--on-accent);
-        font-size: 16px;
+        font-size: var(--text-md);
         font-weight: 600;
         cursor: pointer;
       }
@@ -176,7 +176,7 @@ export class MfContactForm extends LitElement {
       button {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--space-2);
       }
 
       fieldset:disabled input,
@@ -222,15 +222,15 @@ export class MfContactForm extends LitElement {
       .status {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        padding: 24px;
+        gap: var(--space-2);
+        padding: var(--space-6);
         border-radius: 16px;
         background: var(--fill);
       }
 
       .thanks {
         font-family: var(--serif);
-        font-size: 20px;
+        font-size: var(--text-lg);
         line-height: 1.4;
       }
     `,

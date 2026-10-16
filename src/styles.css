@@ -16,6 +16,26 @@
   --serif: 'Lora', Georgia, serif;
   --sans: 'IBM Plex Sans', system-ui, sans-serif;
 
+  /* Spacing: multiples of 4px, named by the multiple (--space-4 is 16px). */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-18: 72px;
+  --space-24: 96px;
+
+  /* Type scale. The last two scale with the viewport. */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-lede: clamp(24px, 4.5vw, 28px);
+  --text-display: clamp(40px, 9vw, 52px);
+
   color-scheme: light;
 }
 
@@ -74,7 +94,7 @@ body {
   background: var(--ground);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 16px;
+  font-size: var(--text-md);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }

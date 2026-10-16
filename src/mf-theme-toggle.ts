@@ -20,7 +20,10 @@ function currentTheme(): Theme {
   return systemDark.matches ? 'dark' : 'light';
 }
 
-/** Switches between light and dark mode and remembers the choice. */
+/**
+ * Switches between light and dark mode and remembers the choice. The icon
+ * shows the theme a click switches to, matching the button's label.
+ */
 @customElement('mf-theme-toggle')
 export class MfThemeToggle extends LitElement {
   @state() private theme: Theme = currentTheme();
@@ -64,7 +67,7 @@ export class MfThemeToggle extends LitElement {
         title=${dark ? 'Switch to light mode' : 'Switch to dark mode'}
       >
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          ${dark ? moonIcon : sunIcon}
+          ${dark ? sunIcon : moonIcon}
         </svg>
       </button>
     `;

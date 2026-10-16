@@ -15,9 +15,9 @@ const githubIcon = svg`<path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-
 export class MfHome extends LitElement {
   private pill(href: string, label: string, icon: ReturnType<typeof svg>) {
     return html`
-      <a class="pill" href=${href} rel="me">
+      <a class="pill" href=${href} target="_blank" rel="me noopener noreferrer">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icon}</svg>
-        ${label}
+        ${label}<span class="visually-hidden"> (opens in a new tab)</span>
       </a>
     `;
   }

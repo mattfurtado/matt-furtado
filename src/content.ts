@@ -13,7 +13,7 @@ export interface Role {
 }
 
 export const profile = {
-  name: 'Matthew Furtado',
+  name: 'Matt Furtado',
   tagline: 'Engineering Manager',
   email: 'mptado@gmail.com',
   linkedin: 'https://www.linkedin.com/in/mattfurtado',

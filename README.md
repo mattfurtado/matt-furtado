@@ -1,6 +1,6 @@
 # mattfurtado.com
 
-Personal site for Matthew Furtado, live at [www.mattfurtado.com](https://www.mattfurtado.com).
+Personal site for Matt Furtado, live at [www.mattfurtado.com](https://www.mattfurtado.com).
 
 ![Screenshot of the site](docs/screenshot.png)
 

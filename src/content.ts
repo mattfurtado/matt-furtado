@@ -1,6 +1,6 @@
 // All site copy lives here so it can be edited without touching components.
 
-import { html } from 'lit';
+import { html, type TemplateResult } from 'lit';
 
 export interface Role {
   title: string;
@@ -9,13 +9,12 @@ export interface Role {
   start: string;
   /** ISO month, or null for the current role */
   end: string | null;
-  summary: string;
+  summary: string | TemplateResult;
 }
 
 export const profile = {
   name: 'Matthew Furtado',
-  initials: 'MF',
-  tagline: 'Engineering Manager · Reading, Massachusetts',
+  tagline: 'Engineering Manager',
   email: 'mptado@gmail.com',
   linkedin: 'https://www.linkedin.com/in/mattfurtado',
   github: 'https://github.com/mattfurtado',
@@ -35,8 +34,8 @@ export const about = {
     enthusiast.`,
 };
 
-export const contact = `Questions, ideas, or just want to compare notes on
-  building developer platforms? Drop me a line.`;
+export const contact = `Questions, ideas, or just want to talk baseball or
+  craft beer? Drop me a line.`;
 
 export const roles: Role[] = [
   {
@@ -79,17 +78,22 @@ export const roles: Role[] = [
     team: 'Marketplace',
     start: '2022-04',
     end: '2026-07',
-    summary: `Managed eight engineers to deliver the Unified Marketplace, one
-      platform for 8,000+ listings, and the Embedded Marketplace across the
-      product. Discovery experiments lifted search and recommendation clicks
-      by about 30%.`,
+    summary: html`Led the team that delivered the
+      <a href="https://ecosystem.hubspot.com/marketplace" target="_blank" rel="noopener noreferrer"
+        >Unified Marketplace<span class="visually-hidden"> (opens in a new tab)</span></a
+      >, one platform for 8,000+ listings, and the Embedded Marketplace across
+      the product.`,
   },
   {
     title: 'Engineering Manager',
     team: 'Builder Experience',
     start: '2026-07',
     end: null,
-    summary: `Leading a full-stack team of six building an AI agent for
-      creating UI extensions in natural language, now in private beta.`,
+    summary: html`Leading a full-stack team building an AI agent for creating
+      UI extensions on the
+      <a href="https://developers.hubspot.com/" target="_blank" rel="noopener noreferrer"
+        >HubSpot developer platform<span class="visually-hidden"> (opens in a new tab)</span></a
+      >
+      using natural language.`,
   },
 ];

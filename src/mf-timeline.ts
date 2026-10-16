@@ -54,51 +54,49 @@ export class MfTimeline extends LitElement {
   render() {
     if (!this.roles.length) return null;
 
-    const first = toMonths(this.roles[0].start);
     const now = currentMonth();
-    const span = now - first;
-    const firstYear = Math.floor(first / 12);
-    const lastYear = Math.floor(now / 12);
-    const ticks = [];
-    for (let y = firstYear + 1; y <= lastYear; y++) {
-      if ((y - firstYear) % 5 === 0 && (y * 12 - first) / span < 0.92) ticks.push(y);
-    }
+    // Columns share space by tenure, but never shrink below a tappable width.
+    const columns = this.roles
+      .map((r) => {
+        const months = (r.end ? toMonths(r.end) : now) - toMonths(r.start);
+        return `minmax(44px, ${months}fr)`;
+      })
+      .join(' ');
 
     const role = this.roles[this.active];
 
     return html`
-      <div class="rail" role="group" aria-label="Roles at HubSpot, 2011 to today" @keydown=${this.onKeydown}>
-        ${this.roles.map((r, i) => {
-          const end = r.end ? toMonths(r.end) : now;
-          const width = ((end - toMonths(r.start)) / span) * 100;
-          return html`
+      <div
+        class="rail"
+        role="group"
+        aria-label="Roles at HubSpot, 2011 to today"
+        style="grid-template-columns:${columns}"
+        @keydown=${this.onKeydown}
+      >
+        ${this.roles.map(
+          (r, i) => html`
             <button
               class="segment"
-              style="flex-basis:${width}%"
               aria-pressed=${i === this.active}
-              aria-label="${r.title}, ${r.team}"
+              aria-label="${r.title}, ${r.team}, from ${formatMonth(r.start)}"
               tabindex=${i === this.active ? 0 : -1}
               @click=${() => this.select(i)}
-            ></button>
-          `;
-        })}
-      </div>
-      <div class="axis" aria-hidden="true">
-        <span style="left:0">${firstYear}</span>
-        ${ticks.map(
-          (y) =>
-            html`<span style="left:${((y * 12 - first) / span) * 100}%">${y}</span>`,
+            >
+              <span class="bar"></span>
+              <span class="year" aria-hidden="true">${r.start.slice(0, 4)}</span>
+            </button>
+          `,
         )}
       </div>
 
       <div class="detail" aria-live="polite">
-        <p class="title">${role.title}<span class="team">, ${role.team}</span></p>
+        <p class="title">${role.title}</p>
+        <p class="team">${role.team}</p>
         <p class="dates">
           ${formatMonth(role.start)} to ${role.end ? formatMonth(role.end) : 'today'}
         </p>
         <p class="summary">${role.summary}</p>
       </div>
-      <p class="hint">Choose a segment to see each role.</p>
     `;
   }
 
@@ -106,47 +104,58 @@ export class MfTimeline extends LitElement {
     sharedStyles,
     css`
       .rail {
-        display: flex;
+        display: grid;
         gap: 4px;
-        height: 44px;
       }
 
       .segment {
         appearance: none;
         border: 0;
         padding: 0;
-        min-width: 12px;
-        background: var(--line);
-        border-radius: 8px;
+        background: none;
+        font: inherit;
+        color: var(--ink-soft);
+        text-align: left;
         cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border-radius: 8px;
+      }
+
+      .bar {
+        display: block;
+        height: 44px;
+        border-radius: 8px;
+        background: var(--line);
         transition: background-color 160ms ease;
       }
 
-      .segment:hover {
-        background: #c4b29f;
-      }
-
-      .segment[aria-pressed='true'] {
-        background: var(--accent);
-      }
-
-      .axis {
-        position: relative;
-        height: 20px;
-        margin-top: 8px;
+      .year {
         font-size: 12px;
-        color: var(--ink-soft);
         font-variant-numeric: tabular-nums;
       }
 
-      .axis span {
-        position: absolute;
-        top: 0;
+      .segment:hover .bar {
+        background: #c4b29f;
+      }
+
+      .segment:hover .year {
+        color: var(--ink);
+      }
+
+      .segment[aria-pressed='true'] .bar {
+        background: var(--accent);
+      }
+
+      .segment[aria-pressed='true'] .year {
+        color: var(--ink);
+        font-weight: 600;
       }
 
       .detail {
         margin-top: 20px;
-        min-height: 152px;
+        min-height: 176px;
       }
 
       .title {
@@ -156,12 +165,12 @@ export class MfTimeline extends LitElement {
       }
 
       .team {
-        color: var(--ink-soft);
+        margin-top: 4px;
       }
 
       .dates {
         margin-top: 4px;
-        font-size: 12px;
+        font-size: 14px;
         color: var(--ink-soft);
       }
 
@@ -169,13 +178,8 @@ export class MfTimeline extends LitElement {
         margin-top: 12px;
       }
 
-      .hint {
-        font-size: 12px;
-        color: var(--ink-soft);
-      }
-
       @media (prefers-reduced-motion: reduce) {
-        .segment {
+        .bar {
           transition: none;
         }
       }

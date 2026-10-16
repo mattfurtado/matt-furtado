@@ -2,6 +2,8 @@ import { LitElement, css, html, svg } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { sharedStyles } from './shared-styles.ts';
 import { about, contact, profile, roles } from './content.ts';
+import headshot from './assets/headshot.jpg';
+import { logo } from './mf-logo.ts';
 import './mf-timeline.ts';
 import './mf-contact-form.ts';
 
@@ -24,7 +26,10 @@ export class MfHome extends LitElement {
     return html`
       <main>
         <header>
-          <div class="badge" aria-hidden="true">${profile.initials}</div>
+          <div class="avatars">
+            <div class="avatar badge">${logo}</div>
+            <img class="avatar" src=${headshot} alt="Photo of ${profile.name}" width="96" height="96" />
+          </div>
           <h1>${profile.name}</h1>
           <p class="tagline">${profile.tagline}</p>
           <nav aria-label="Elsewhere">
@@ -48,7 +53,7 @@ export class MfHome extends LitElement {
         <section aria-labelledby="contact">
           <h2 id="contact">Say hello</h2>
           <p class="soft">${contact}</p>
-          <mf-contact-form .email=${profile.email}></mf-contact-form>
+          <mf-contact-form></mf-contact-form>
         </section>
 
         <footer>© ${new Date().getFullYear()} ${profile.name}</footer>
@@ -82,18 +87,35 @@ export class MfHome extends LitElement {
         gap: 16px;
       }
 
-      .badge {
-        width: 56px;
-        height: 56px;
+      .avatars {
+        display: flex;
+        /* Offset the separator border so the logo lines up with the text. */
+        margin-left: -4px;
+      }
+
+      .avatar {
+        display: block;
+        width: 96px;
+        height: 96px;
+        border: 4px solid var(--ground);
         border-radius: 50%;
-        background: var(--accent);
-        color: var(--on-accent);
+        object-fit: cover;
+      }
+
+      .avatar + .avatar {
+        margin-left: -16px;
+      }
+
+      .badge {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: var(--serif);
-        font-size: 24px;
-        letter-spacing: 0.5px;
+        background: var(--accent);
+        color: var(--on-accent);
+      }
+
+      .logo {
+        width: 44px;
       }
 
       h1 {

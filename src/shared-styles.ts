@@ -24,7 +24,7 @@ export const sharedStyles = css`
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--label);
   }
 
   p {

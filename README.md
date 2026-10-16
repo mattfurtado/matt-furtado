@@ -11,6 +11,7 @@ Personal site for Matt Furtado, live at [www.mattfurtado.com](https://www.mattfu
 - **[Vercel](https://vercel.com)** for hosting, deploying from `main`, plus a serverless function for the contact form
 - **[Resend](https://resend.com)** for contact form email, installed through the Vercel Marketplace
 - **Google Sheets API** for keeping a log of contact form messages
+- **Google Analytics 4** for page views, clicks, and form submissions
 - **pnpm** for package management
 
 The site is a single static page. Lit is the only library it ships to the browser, and all of its JavaScript comes to about 11 KB gzipped.
@@ -41,6 +42,7 @@ src/
   mf-timeline.ts        Interactive career timeline
   mf-contact-form.ts    Contact form with sending, sent, and error states
   mf-logo.ts            MF monogram as an inline SVG
+  analytics.ts          Google Analytics setup, click tracking, and a track() helper
   styles.css            Global color and font tokens
   shared-styles.ts      Link, focus, and heading styles shared by components
   assets/               Images processed by Vite
@@ -64,3 +66,16 @@ src/
 | `CONTACT_TO_EMAIL` | Where contact form messages are sent |
 | `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_PRIVATE_KEY` | Service account with edit access to the sheet |
 | `GOOGLE_SHEET_ID` | The sheet that logs messages (rows go to its first tab) |
+| `VITE_GA_MEASUREMENT_ID` | GA4 measurement ID, set for production only |
+
+**Analytics** loads Google Analytics only in production builds with `VITE_GA_MEASUREMENT_ID` set, so local development and preview deploys send nothing. GA's automatic outbound link tracking can't see inside shadow DOM, so `src/analytics.ts` listens for clicks on the document and reads each event's composed path to find the link or button and its section.
+
+| Event | Sent when | Parameters |
+|---|---|---|
+| `page_view` | The page loads (sent by GA) | Standard GA fields |
+| `element_click` | Any link or button is clicked | `element_type`, `element_text`, `section`, and for links `link_url` and `outbound` |
+| `contact_form_submit` | The contact form is submitted | None |
+| `generate_lead` | A message is sent successfully | `form` |
+| `contact_form_error` | Sending fails | `reason` (`network`, `invalid`, or `server`), `http_status` |
+
+Form contents are never sent to Google Analytics.

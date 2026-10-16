@@ -6,6 +6,9 @@ import headshot from './assets/headshot.jpg';
 import { logo } from './mf-logo.ts';
 import './mf-timeline.ts';
 import './mf-contact-form.ts';
+import { initAnalytics } from './analytics.ts';
+
+initAnalytics();
 
 const linkedinIcon = svg`<rect x="3" y="3" width="18" height="18" rx="3"></rect><line x1="8" y1="10" x2="8" y2="17"></line><circle cx="8" cy="7" r="0.6"></circle><path d="M12 17v-4a2.5 2.5 0 0 1 5 0v4"></path><line x1="12" y1="10" x2="12" y2="17"></line>`;
 

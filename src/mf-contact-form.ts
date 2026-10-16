@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { sharedStyles } from './shared-styles.ts';
+import { track } from './analytics.ts';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
@@ -33,22 +34,31 @@ export class MfContactForm extends LitElement {
     const data = Object.fromEntries(new FormData(form));
 
     this.status = 'sending';
+    track('contact_form_submit');
+    let httpStatus = 0;
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, id: this.submissionId }),
       });
+      httpStatus = res.status;
       const result = await res.json().catch(() => ({}));
       if (!res.ok || !result.ok) throw new Error(result.error ?? 'Your message couldn’t be sent.');
       this.status = 'sent';
       this.submissionId = null;
+      // GA4's recommended event for a contact request. Never include what the visitor typed.
+      track('generate_lead', { form: 'contact' });
     } catch (err) {
       this.error =
         err instanceof TypeError
           ? 'Your message couldn’t be sent. Check your connection and try again.'
           : (err as Error).message;
       this.status = 'error';
+      track('contact_form_error', {
+        reason: httpStatus === 0 ? 'network' : httpStatus < 500 ? 'invalid' : 'server',
+        http_status: httpStatus,
+      });
     }
   }
 

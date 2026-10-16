@@ -8,31 +8,38 @@ Personal site for Matthew Furtado, live at [www.mattfurtado.com](https://www.mat
 
 - **[Lit](https://lit.dev)** web components, written in TypeScript
 - **[Vite](https://vite.dev)** for the dev server and production build
-- **[Vercel](https://vercel.com)** for hosting, deploying from `main`
+- **[Vercel](https://vercel.com)** for hosting, deploying from `main`, plus a serverless function for the contact form
+- **[Resend](https://resend.com)** for contact form email, installed through the Vercel Marketplace
+- **Google Sheets API** for keeping a log of contact form messages
 - **pnpm** for package management
 
-The site is a single static page. Its only runtime dependency is Lit, and all of its JavaScript comes to about 11 KB gzipped.
+The site is a single static page. Lit is the only library it ships to the browser, and all of its JavaScript comes to about 11 KB gzipped.
 
 ## Getting started
 
 ```sh
 pnpm install
-pnpm dev       # start the dev server
-pnpm build     # type-check and build to dist/
+pnpm dev       # start the dev server (site only)
+vercel dev     # start the site and the contact form function
+pnpm build     # type-check the site and function, then build to dist/
 pnpm preview   # serve the production build
 ```
+
+Environment variables live in Vercel. Run `vercel env pull` to copy them into `.env.local` for local development.
 
 ## Project layout
 
 ```
 index.html              Page shell, fonts, and social sharing tags
 vite.config.ts          Fills in the site URL for absolute links in index.html
+api/
+  contact.ts            Contact form function: sends the email and logs a row in Google Sheets
 public/                 Favicon and share image, copied as-is
 src/
   content.ts            All site copy and career data
   mf-home.ts            Page layout: header, About, timeline, contact
   mf-timeline.ts        Interactive career timeline
-  mf-contact-form.ts    Contact form (not wired to a mail service yet)
+  mf-contact-form.ts    Contact form with sending, sent, and error states
   mf-logo.ts            MF monogram as an inline SVG
   styles.css            Global color and font tokens
   shared-styles.ts      Link, focus, and heading styles shared by components
@@ -49,6 +56,11 @@ src/
 
 **Social sharing tags** (Open Graph and Twitter) in `index.html` use a `%SITE_URL%` placeholder. A small plugin in `vite.config.ts` replaces it with `https://www.mattfurtado.com` at build time, because link previews require absolute URLs. The share image is `public/og-image.png` (1200×630).
 
-## To do
+**The contact form** posts JSON to `/api/contact`, a Vercel function. The function checks the fields, then does two things in parallel: emails the message through Resend, with the visitor as the reply-to, and appends a row to a Google Sheet through a service account. The visitor sees success if either one works, and any failure is logged in Vercel. A hidden honeypot field filters out simple bots, and each submission carries an id that Resend uses as an idempotency key, so a retry never sends twice.
 
-- Connect the contact form to a mail service. Submissions currently do nothing; see `onSubmit` in `src/mf-contact-form.ts`.
+| Variable | Purpose |
+|---|---|
+| `RESEND_API_KEY`, `RESEND_EMAIL_DOMAIN` | Resend key and sending domain, added by the Marketplace integration |
+| `CONTACT_TO_EMAIL` | Where contact form messages are sent |
+| `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_PRIVATE_KEY` | Service account with edit access to the sheet |
+| `GOOGLE_SHEET_ID` | The sheet that logs messages (rows go to its first tab) |

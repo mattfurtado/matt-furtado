@@ -53,7 +53,7 @@ export class MfHome extends LitElement {
         <section aria-labelledby="contact">
           <h2 id="contact">Say hello</h2>
           <p class="soft">${contact}</p>
-          <mf-contact-form></mf-contact-form>
+          <mf-contact-form .email=${profile.email}></mf-contact-form>
         </section>
 
         <footer>© ${new Date().getFullYear()} ${profile.name}</footer>

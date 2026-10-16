@@ -1,26 +1,83 @@
 import { LitElement, css, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { sharedStyles } from './shared-styles.ts';
 
-/**
- * Contact form. Submitting does nothing yet.
- * TODO(matt): send submissions to a mail service.
- */
+type Status = 'idle' | 'sending' | 'sent' | 'error';
+
+/** Contact form that posts to the /api/contact function. */
 @customElement('mf-contact-form')
 export class MfContactForm extends LitElement {
-  private onSubmit(e: SubmitEvent) {
+  /** Shown as a fallback when sending fails. */
+  @property() email = '';
+
+  @state() private status: Status = 'idle';
+  @state() private error = '';
+
+  // One id per version of the message, so a retry of the same message is
+  // never sent twice, but an edited message is treated as new.
+  private submissionId: string | null = null;
+
+  private onInput() {
+    this.submissionId = null;
+  }
+
+  private async onSubmit(e: SubmitEvent) {
     e.preventDefault();
+    if (this.status === 'sending') return;
+
+    const form = e.target as HTMLFormElement;
+    this.submissionId ??= crypto.randomUUID();
+    const data = Object.fromEntries(new FormData(form));
+
+    this.status = 'sending';
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, id: this.submissionId }),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || !result.ok) throw new Error(result.error ?? 'Your message couldn’t be sent.');
+      this.status = 'sent';
+      this.submissionId = null;
+    } catch (err) {
+      this.error =
+        err instanceof TypeError
+          ? 'Your message couldn’t be sent. Check your connection and try again.'
+          : (err as Error).message;
+      this.status = 'error';
+    }
   }
 
   render() {
-    return html`
-      <form @submit=${this.onSubmit}>
-        <div class="row">
-          <label>Name <input type="text" name="name" required autocomplete="name" /></label>
-          <label>Email <input type="email" name="email" required autocomplete="email" /></label>
+    if (this.status === 'sent') {
+      return html`
+        <div class="status" role="status">
+          <p>Thanks for reaching out. I’ll get back to you soon.</p>
         </div>
-        <label>Message <textarea name="message" rows="5" required></textarea></label>
-        <div><button type="submit">Send message</button></div>
+      `;
+    }
+
+    const sending = this.status === 'sending';
+    return html`
+      <form @submit=${this.onSubmit} @input=${this.onInput}>
+        <div class="row">
+          <label>Name <input type="text" name="name" required maxlength="200" autocomplete="name" /></label>
+          <label>Email <input type="email" name="email" required maxlength="320" autocomplete="email" /></label>
+        </div>
+        <label>Message <textarea name="message" rows="5" required maxlength="5000"></textarea></label>
+        <div class="trap" aria-hidden="true">
+          <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+        </div>
+        ${this.status === 'error'
+          ? html`<p class="error" role="alert">
+              ${this.error} You can also email me at
+              <a href="mailto:${this.email}">${this.email}</a>.
+            </p>`
+          : null}
+        <div>
+          <button type="submit" ?disabled=${sending}>${sending ? 'Sending…' : 'Send message'}</button>
+        </div>
       </form>
     `;
   }
@@ -85,6 +142,33 @@ export class MfContactForm extends LitElement {
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: progress;
+      }
+
+      /* Hidden from people; bots that fill every field get filtered out. */
+      .trap {
+        position: absolute;
+        left: -9999px;
+      }
+
+      .error {
+        color: var(--label);
+      }
+
+      .status {
+        padding: 24px;
+        border-radius: 16px;
+        background: var(--fill);
+      }
+
+      .status p {
+        font-family: var(--serif);
+        font-size: 20px;
+        line-height: 1.4;
       }
     `,
   ];

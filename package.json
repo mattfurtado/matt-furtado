@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && tsc -p api && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "lit": "^3.3.3"
+    "google-auth-library": "^11.3.0",
+    "lit": "^3.3.3",
+    "resend": "^6.33.0"
   },
   "devDependencies": {
+    "@types/node": "^26.6.5",
     "typescript": "~6.0.2",
     "vite": "^8.3.0"
   }

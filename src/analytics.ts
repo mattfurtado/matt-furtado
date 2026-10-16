@@ -10,6 +10,50 @@ declare global {
 
 const measurementId: string | undefined = import.meta.env.VITE_GA_MEASUREMENT_ID;
 
+/** True when this build sends data to Google Analytics. */
+export const analyticsEnabled = import.meta.env.PROD && Boolean(measurementId);
+
+/**
+ * Add ?consent to the URL to show the consent banner and the footer's
+ * "Cookie settings" link, even locally where analytics is off.
+ */
+export const consentPreview = new URLSearchParams(location.search).has('consent');
+
+/** Whether the consent banner and its footer link should be available. */
+export const consentUiEnabled = analyticsEnabled || consentPreview;
+
+export type Consent = 'granted' | 'denied';
+
+const CONSENT_KEY = 'mf-analytics-consent';
+
+// Regions where analytics cookies need opt-in consent: the EEA, the UK, and
+// Switzerland. Google applies these defaults based on the visitor's location.
+const OPT_IN_REGIONS = [
+  'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU',
+  'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES',
+  'SE', 'IS', 'LI', 'NO', 'GB', 'CH',
+];
+
+/** The visitor's saved choice, or null if they haven't chosen yet. */
+export function savedConsent(): Consent | null {
+  try {
+    const value = localStorage.getItem(CONSENT_KEY);
+    return value === 'granted' || value === 'denied' ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Saves the visitor's choice and applies it to Google Analytics. */
+export function setConsent(consent: Consent) {
+  try {
+    localStorage.setItem(CONSENT_KEY, consent);
+  } catch {
+    // Storage blocked: the choice still applies for this visit.
+  }
+  window.gtag?.('consent', 'update', { analytics_storage: consent });
+}
+
 /** Sends a GA4 event. Does nothing when analytics isn't loaded. */
 export function track(name: string, params: Record<string, string | number | boolean> = {}) {
   window.gtag?.('event', name, params);
@@ -54,13 +98,28 @@ function onClick(event: MouseEvent) {
 }
 
 export function initAnalytics() {
-  if (!import.meta.env.PROD || !measurementId) return;
+  if (!analyticsEnabled) return;
 
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() {
     // gtag.js expects the arguments object itself, not an array.
     window.dataLayer.push(arguments);
   };
+
+  // Consent Mode v2. Ad features stay off everywhere. Analytics cookies are
+  // opt-in in OPT_IN_REGIONS and on by default elsewhere, where visitors can
+  // still decline. Both defaults must be set before 'config'.
+  const noAds = { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' };
+  window.gtag('consent', 'default', {
+    ...noAds,
+    analytics_storage: 'denied',
+    region: OPT_IN_REGIONS,
+    wait_for_update: 500,
+  });
+  window.gtag('consent', 'default', { ...noAds, analytics_storage: 'granted' });
+  const consent = savedConsent();
+  if (consent) window.gtag('consent', 'update', { analytics_storage: consent });
+
   window.gtag('js', new Date());
   window.gtag('config', measurementId); // also sends the page_view
 

@@ -37,12 +37,14 @@ api/
   contact.ts            Contact form function: sends the email and logs a row in Google Sheets
 public/                 Favicon and share image, copied as-is
 src/
+  main.ts               Entry point that loads the page and consent banner
   content.ts            All site copy and career data
   mf-home.ts            Page layout: header, About, timeline, contact
   mf-timeline.ts        Interactive career timeline
   mf-contact-form.ts    Contact form with sending, sent, and error states
   mf-logo.ts            MF monogram as an inline SVG
-  analytics.ts          Google Analytics setup, click tracking, and a track() helper
+  analytics.ts          Google Analytics setup, consent, click tracking, and a track() helper
+  mf-consent-banner.ts  Cookie consent banner
   styles.css            Global color and font tokens
   shared-styles.ts      Link, focus, and heading styles shared by components
   assets/               Images processed by Vite
@@ -79,3 +81,5 @@ src/
 | `contact_form_error` | Sending fails | `reason` (`network`, `invalid`, or `server`), `http_status` |
 
 Form contents are never sent to Google Analytics.
+
+**Consent** uses Google Consent Mode v2. Ad features are denied everywhere. Analytics cookies default to denied in the EEA, the UK, and Switzerland and to granted elsewhere; Google applies the right default from the visitor's location. Every visitor sees a banner with equally weighted Accept and Decline buttons, and the choice is saved in `localStorage` and applied on later visits. "Cookie settings" in the footer reopens the banner. To try the banner locally, where analytics is off, add `?consent` to the URL (for example `http://localhost:5173/?consent`).

@@ -6,7 +6,8 @@ import headshot from './assets/headshot.jpg';
 import { logo } from './mf-logo.ts';
 import './mf-timeline.ts';
 import './mf-contact-form.ts';
-import { initAnalytics } from './analytics.ts';
+import { consentUiEnabled, initAnalytics } from './analytics.ts';
+import { OPEN_CONSENT_EVENT } from './mf-consent-banner.ts';
 
 initAnalytics();
 
@@ -59,7 +60,17 @@ export class MfHome extends LitElement {
           <mf-contact-form .email=${profile.email} .resume=${profile.resume}></mf-contact-form>
         </section>
 
-        <footer>© ${new Date().getFullYear()} ${profile.name}</footer>
+        <footer>
+          <span>© ${new Date().getFullYear()} ${profile.name}</span>
+          ${consentUiEnabled
+            ? html`<button
+                class="link-button"
+                @click=${() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
+              >
+                Cookie settings
+              </button>`
+            : null}
+        </footer>
       </main>
     `;
   }
@@ -167,7 +178,24 @@ export class MfHome extends LitElement {
       }
 
       footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 16px;
         font-size: 12px;
+      }
+
+      .link-button {
+        padding: 0;
+        border: 0;
+        background: none;
+        font: inherit;
+        color: inherit;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .link-button:hover {
+        color: var(--accent);
       }
     `,
   ];

@@ -1,0 +1,33 @@
+:root {
+  --ground: #f5efe6;
+  --ink: #2b2420;
+  --ink-soft: #6b5d52;
+  --accent: #9a4a2c;
+  --on-accent: #fff8f0;
+  --line: #d9ccbd;
+  --fill: #efe4d6;
+  --field: #fffcf8;
+
+  --serif: 'Lora', Georgia, serif;
+  --sans: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}

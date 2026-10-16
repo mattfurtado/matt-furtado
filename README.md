@@ -62,7 +62,7 @@ src/
 
 **Dark mode** uses the same tokens with darker values, defined in `src/styles.css`. The site follows the visitor's system setting until they use the toggle in the top right, which saves their choice to `localStorage`. A small script in `index.html` applies a saved choice before the page draws, so it never flashes the wrong theme.
 
-**The timeline** is a CSS grid with one column per role. Each column is `minmax(44px, <months>fr)`, so widths reflect tenure but never drop below a usable tap target. Each column is a button labeled with the role's start year. Selecting one shows the role's details below the grid, and the left and right arrow keys move between roles.
+**The timeline** is a CSS grid with one column per role. Each column is `minmax(44px, <months>fr)`, so widths reflect tenure but never drop below a usable tap target. Each column is a button labeled with the role's start year. Selecting one shows the role's details below the grid, and the left and right arrow keys move between roles. On touch screens, swiping left or right does the same; the swipe area uses `touch-action: pan-y` so vertical scrolling still belongs to the browser.
 
 **Social sharing tags** (Open Graph and Twitter) in `index.html` use a `%SITE_URL%` placeholder. A small plugin in `vite.config.ts` replaces it with `https://www.mattfurtado.com` at build time, because link previews require absolute URLs. The share image is `public/og-image.png` (1200×630).
 
@@ -82,6 +82,7 @@ src/
 |---|---|---|
 | `page_view` | The page loads (sent by GA) | Standard GA fields |
 | `element_click` | Any link or button is clicked | `element_type`, `element_text`, `section`, and for links `link_url` and `outbound` |
+| `timeline_swipe` | A visitor swipes to another role on a touch screen | `direction` (`next` or `previous`), `role` |
 | `contact_form_submit` | The contact form is submitted | None |
 | `generate_lead` | A message is sent successfully | `form` |
 | `contact_form_error` | Sending fails | `reason` (`network`, `invalid`, or `server`), `http_status` |

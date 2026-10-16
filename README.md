@@ -37,7 +37,7 @@ api/
   contact.ts            Contact form function: sends the email and logs a row in Google Sheets
 public/                 Favicon and share image, copied as-is
 src/
-  main.ts               Entry point that loads the page and consent banner
+  main.ts               Entry point that loads the page, theme toggle, and consent banner
   content.ts            All site copy and career data
   mf-home.ts            Page layout: header, About, timeline, contact
   mf-timeline.ts        Interactive career timeline
@@ -45,6 +45,7 @@ src/
   mf-logo.ts            MF monogram as an inline SVG
   analytics.ts          Google Analytics setup, consent, click tracking, and a track() helper
   mf-consent-banner.ts  Cookie consent banner
+  mf-theme-toggle.ts    Light and dark mode toggle
   styles.css            Global color and font tokens
   shared-styles.ts      Link, focus, and heading styles shared by components
   assets/               Images processed by Vite
@@ -55,6 +56,8 @@ src/
 **Content is separate from components.** Text, links, and roles live in `src/content.ts`. Most entries are plain strings; entries that need inline links are Lit `html` templates.
 
 **Styling uses CSS custom properties.** Colors and fonts are defined once on `:root` in `src/styles.css`. Those values inherit into each component's shadow DOM, so changing a token updates the whole site. Type is Lora for headings and IBM Plex Sans for body copy. Font sizes and spacing use multiples of 4px, with 14px timeline dates as the one exception.
+
+**Dark mode** uses the same tokens with darker values, defined in `src/styles.css`. The site follows the visitor's system setting until they use the toggle in the top right, which saves their choice to `localStorage`. A small script in `index.html` applies a saved choice before the page draws, so it never flashes the wrong theme.
 
 **The timeline** is a CSS grid with one column per role. Each column is `minmax(44px, <months>fr)`, so widths reflect tenure but never drop below a usable tap target. Each column is a button labeled with the role's start year. Selecting one shows the role's details below the grid, and the left and right arrow keys move between roles.
 

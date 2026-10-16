@@ -30,12 +30,12 @@ export const about = {
       >HubSpot<span class="visually-hidden"> (opens in a new tab)</span></a
     >, where I grew from a designer &amp; software engineer as the company
     went from startup to public. Today I lead a team building AI tools for developers.`,
-  personal: `Outside of work, I live in Reading, MA, where I am a proud father &
-    baseball coach of twin boys, lover of live music, and a craft beer
-    enthusiast.`,
+  personal: `Outside of work, I live in Reading, MA, where I'm a proud father &
+    baseball coach of twin boys, lover of live music, amateur skier & golfer,
+    and a craft beer enthusiast.`,
 };
 
-export const contact = `Questions, ideas, or just want to talk baseball or
+export const contact = `Questions, ideas, or just want to talk sports or
   craft beer? Drop me a line.`;
 
 export const roles: Role[] = [

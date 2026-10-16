@@ -3,14 +3,60 @@
   --ink: #2b2420;
   --ink-soft: #6b5d52;
   --accent: #1f3a5f;
-  --label: #9a4a2c;
   --on-accent: #fff8f0;
+  --label: #9a4a2c;
   --line: #d9ccbd;
+  --line-strong: #c4b29f;
   --fill: #efe4d6;
   --field: #fffcf8;
+  --brand: #1f3a5f;
+  --on-brand: #fff8f0;
+  --shadow: rgb(43 36 32 / 0.12);
 
   --serif: 'Lora', Georgia, serif;
   --sans: 'IBM Plex Sans', system-ui, sans-serif;
+
+  color-scheme: light;
+}
+
+/* Dark tokens apply when the visitor picks dark, or when their system is
+   dark and they haven't picked light. Keep the two blocks in sync. */
+:root[data-theme='dark'] {
+  --ground: #1f1a17;
+  --ink: #f2e8df;
+  --ink-soft: #b5a497;
+  --accent: #9db8de;
+  --on-accent: #1f1a17;
+  --label: #e39a76;
+  --line: #4a3f38;
+  --line-strong: #6b5d52;
+  --fill: #2c2420;
+  --field: #28211d;
+  --brand: #2a4a75;
+  --on-brand: #fff8f0;
+  --shadow: rgb(0 0 0 / 0.4);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ground: #1f1a17;
+    --ink: #f2e8df;
+    --ink-soft: #b5a497;
+    --accent: #9db8de;
+    --on-accent: #1f1a17;
+    --label: #e39a76;
+    --line: #4a3f38;
+    --line-strong: #6b5d52;
+    --fill: #2c2420;
+    --field: #28211d;
+    --brand: #2a4a75;
+    --on-brand: #fff8f0;
+    --shadow: rgb(0 0 0 / 0.4);
+
+    color-scheme: dark;
+  }
 }
 
 *,

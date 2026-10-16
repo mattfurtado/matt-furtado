@@ -137,7 +137,7 @@ export class MfTimeline extends LitElement {
       }
 
       .segment:hover .bar {
-        background: #c4b29f;
+        background: var(--line-strong);
       }
 
       .segment:hover .year {

@@ -65,7 +65,7 @@ export class MfConsentBanner extends LitElement {
         background: var(--field);
         border: 1px solid var(--line);
         border-radius: 16px;
-        box-shadow: 0 8px 24px rgb(43 36 32 / 0.12);
+        box-shadow: 0 8px 24px var(--shadow);
       }
 
       p {

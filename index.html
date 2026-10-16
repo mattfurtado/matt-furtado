@@ -18,6 +18,22 @@
     <meta property="og:image:alt" content="Matt Furtado, Engineering Manager" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#f5efe6" />
+    <script>
+      // Apply a saved theme before first paint so the page never flashes the
+      // wrong colors. Without one, CSS follows the system setting.
+      (function () {
+        var theme = null;
+        try { theme = localStorage.getItem('mf-theme'); } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : null;
+        } else {
+          document.documentElement.dataset.theme = theme;
+        }
+        if (theme === 'dark') {
+          document.querySelector('meta[name="theme-color"]').content = '#1f1a17';
+        }
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,6 +45,7 @@
     <script type="module" src="/src/main.ts"></script>
   </head>
   <body>
+    <mf-theme-toggle></mf-theme-toggle>
     <mf-home></mf-home>
     <mf-consent-banner></mf-consent-banner>
   </body>

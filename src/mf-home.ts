@@ -124,8 +124,8 @@ export class MfHome extends LitElement {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: var(--accent);
-        color: var(--on-accent);
+        background: var(--brand);
+        color: var(--on-brand);
       }
 
       .logo {

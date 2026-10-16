@@ -62,6 +62,9 @@ export class MfHome extends LitElement {
 
         <footer>
           <span>© ${new Date().getFullYear()} ${profile.name}</span>
+          <a href=${profile.repo} target="_blank" rel="noopener noreferrer"
+            >Source<span class="visually-hidden"> (opens in a new tab)</span></a
+          >
           ${consentUiEnabled
             ? html`<button
                 class="link-button"
@@ -182,6 +185,14 @@ export class MfHome extends LitElement {
         flex-wrap: wrap;
         gap: 4px 16px;
         font-size: 12px;
+      }
+
+      footer a {
+        color: inherit;
+      }
+
+      footer a:hover {
+        color: var(--accent);
       }
 
       .link-button {

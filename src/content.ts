@@ -87,15 +87,23 @@ export const roles: Role[] = [
       the product.`,
   },
   {
-    title: 'Engineering Manager',
-    team: 'Builder Experience',
+    title: 'Engineering Lead',
+    team: 'Breeze Builder',
     start: '2026-07',
-    end: null,
-    summary: html`Leading a full-stack team building an AI agent for creating
+    end: '2026-10',
+    summary: html`Led a full-stack team building an AI agent for creating
       UI extensions on the
       <a href="https://developers.hubspot.com/" target="_blank" rel="noopener noreferrer"
         >HubSpot developer platform<span class="visually-hidden"> (opens in a new tab)</span></a
       >
       using natural language.`,
+  },
+  {
+    title: 'Engineering Manager',
+    team: 'Connectors Experience',
+    start: '2026-11',
+    end: null,
+    summary: `Full-stack team building MCP tools and apps in Claude, ChatGPT,
+      Microsoft Copilot, and other hosts.`,
   },
 ];

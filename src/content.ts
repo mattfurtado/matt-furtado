@@ -104,6 +104,6 @@ export const roles: Role[] = [
     start: '2026-11',
     end: null,
     summary: `Full-stack team building MCP tools and apps in Claude, ChatGPT,
-      Microsoft Copilot, and other hosts.`,
+      and other hosts.`,
   },
 ];

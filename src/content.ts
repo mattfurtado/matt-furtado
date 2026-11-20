@@ -56,10 +56,10 @@ export const roles: Role[] = [
   },
   {
     title: 'Senior Software Engineer',
-    team: 'Marketplace & Design Management',
+    team: 'Design Management & Marketplace',
     start: '2016-09',
     end: '2020-01',
-    summary: `Built the frontend for the App Marketplace launch at INBOUND 2019, and drove cross-team work on Themes, a central place to manage site styling.`,
+    summary: `Drove cross-team work on Themes, a central place to manage site styling, and built the frontend for the App Marketplace launch at INBOUND 2019.`,
   },
   {
     title: 'Technical Lead',
